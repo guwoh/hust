@@ -1,0 +1,116 @@
+from docx import Document
+
+# Create a new Word document
+doc = Document()
+doc.add_heading('Tổng hợp cú pháp Git', level=1)
+
+sections = {
+    "1. Cấu hình ban đầu": [
+        'git config --global user.name "Your Name"      # Thiết lập tên',
+        'git config --global user.email "you@example.com"  # Thiết lập email',
+        'git config --list                              # Xem tất cả thiết lập'
+    ],
+    "2. Khởi tạo & Sao chép repository": [
+        'git init                                      # Khởi tạo repo mới trong thư mục hiện tại',
+        'git clone <URL>                               # Sao chép repo về local',
+        'git clone <URL> <folder>                      # Clone vào thư mục đích'
+    ],
+    "3. Kiểm tra trạng thái & Lịch sử": [
+        'git status                                    # Kiểm tra file thay đổi, untracked, staged',
+        'git diff                                      # Xem chi tiết khác biệt (working vs staged)',
+        'git diff --staged                             # Xem khác biệt staged vs last commit',
+        'git log                                       # Xem lịch sử commit',
+        'git log --oneline                             # Xem tóm tắt mỗi commit 1 dòng',
+        'git log --graph --decorate --all              # Hiển thị đồ thị nhánh'
+    ],
+    "4. Đưa thay đổi vào vùng chờ (staging)": [
+        'git add <file>                                # Stage 1 file',
+        'git add .                                     # Stage mọi file đã thay đổi/untracked',
+        'git add -p                                    # Stage theo interactive patch'
+    ],
+    "5. Tạo commit": [
+        'git commit -m "Commit message"                # Commit với message',
+        'git commit -a -m "Msg"                        # Tự động stage file đã tracked + commit',
+        'git commit --amend                            # Sửa commit cuối (message và nội dung)',
+        'git commit --amend --no-edit                  # Thêm sửa nội dung mà giữ nguyên message'
+    ],
+    "6. Làm việc với nhánh (branch)": [
+        'git branch                                    # Liệt kê nhánh local',
+        'git branch -r                                 # Liệt kê nhánh remote',
+        'git branch <name>                             # Tạo nhánh mới',
+        'git checkout <name>                           # Chuyển sang nhánh',
+        'git switch <name>                             # (Git 2.23+) chuyển nhánh',
+        'git checkout -b <name>                        # Tạo + chuyển nhánh',
+        'git switch -c <name>                          # (Git 2.23+) tương tự',
+        'git branch -d <name>                          # Xoá nhánh đã merge',
+        'git branch -D <name>                          # Ép xoá nhánh'
+    ],
+    "7. Merge & Rebase": [
+        'git merge <branch>                            # Gộp branch vào hiện tại',
+        'git rebase <branch>                           # Quăng các commit hiện tại lên trên branch',
+        'git pull --rebase origin <branch>             # Fetch + rebase thay vì merge',
+        'git rebase --abort                            # Huỷ rebase khi conflict',
+        'git rebase --continue                         # Tiếp tục rebase sau khi resolve conflict'
+    ],
+    "8. Remote (đẩy và kéo code)": [
+        'git remote -v                                 # Xem URL remote',
+        'git remote add origin <URL>                   # Thêm remote tên “origin”',
+        'git remote remove <name>                      # Xoá remote',
+        'git fetch origin                              # Tải về không merge',
+        'git pull origin <branch>                      # Fetch + merge',
+        'git push origin <branch>                      # Đẩy branch lên remote',
+        'git push origin --delete <branch>             # Xoá branch remote',
+        'git push --tags                               # Đẩy tất cả tag lên remote'
+    ],
+    "9. Tagging": [
+        'git tag                                       # Liệt kê tag',
+        'git tag -a v1.0 -m "Release 1.0"               # Tạo annotated tag',
+        'git tag v1.0.1                                # Tạo lightweight tag',
+        'git push origin v1.0                          # Đẩy 1 tag'
+    ],
+    "10. Khôi phục & Hoàn tác": [
+        'git checkout -- <file>                         # Hoàn tác file về version cuối',
+        'git reset HEAD <file>                          # Unstage file',
+        'git reset --soft HEAD~1                        # Xóa commit cuối, giữ thay đổi staged',
+        'git reset --mixed HEAD~1                       # Xóa commit cuối, giữ thay đổi unstaged',
+        'git reset --hard HEAD~1                        # Xoá commit và thay đổi',
+        'git revert <commit>                            # Tạo commit mới đảo ngược commit cũ'
+    ],
+    "11. Stash (tạm giữ thay đổi)": [
+        'git stash                                     # Tạm giữ thay đổi hiện tại',
+        'git stash list                                # Liệt kê stash',
+        'git stash apply                               # Áp stash mới nhất',
+        'git stash pop                                 # Áp và xoá stash',
+        'git stash drop                                # Xóa stash mới nhất',
+        'git stash clear                               # Xóa tất cả stash'
+    ],
+    "12. Cherry-pick": [
+        'git cherry-pick <commit>                      # Lấy 1 commit cũ và áp vào nhánh hiện tại'
+    ],
+    "13. Submodule": [
+        'git submodule add <URL> [path]                # Thêm submodule',
+        'git submodule init                            # Khởi tạo submodule',
+        'git submodule update                          # Fetch và checkout submodule',
+        'git submodule sync                            # Đồng bộ URL submodule'
+    ],
+    "14. Cấu hình nâng cao": [
+        'git config --global alias.st status           # Tạo alias: git st',
+        'git config --global core.editor "code --wait" # Đặt VSCode làm editor',
+        'git config --global merge.tool vimdiff        # Chọn tool resolve conflict',
+        'git config --global credential.helper store   # Lưu credential plain-text'
+    ]
+}
+
+# Add sections to document
+for title, commands in sections.items():
+    doc.add_heading(title, level=2)
+    for cmd in commands:
+        p = doc.add_paragraph(cmd)
+        p.style = doc.styles['Normal']
+
+# Save document
+file_path = '/mnt/data/git_syntax_summary.docx'
+doc.save(file_path)
+
+file_path
+

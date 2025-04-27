@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1743047451 source:d:\code\c++\ktlt2\bai_7_27_3\main.cpp
+	<iostream>
+	<bits/stdc++.h>
+
